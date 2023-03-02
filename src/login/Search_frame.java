@@ -207,7 +207,7 @@ ResultSet rs;
 
                  String query="select * from product_sales  WHERE `id` =? ";
                  try {
-                    ps=MyConnection.connecct_2().prepareStatement(query);
+                    ps=MyConnection.connecct().prepareStatement(query);
 
                     ps.setString(1, id);
                     rs=ps.executeQuery();

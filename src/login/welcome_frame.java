@@ -512,7 +512,7 @@ catch(Exception e){
            
             String query="select * from product_sales where id =?";
             try {
-                ps=MyConnection.connecct_2().prepareStatement(query);
+                ps=MyConnection.connecct().prepareStatement(query);
                   ps.setString(1, pcode);
                   rs=ps.executeQuery();
                   if(rs.next()==false)

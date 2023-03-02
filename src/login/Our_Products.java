@@ -316,7 +316,7 @@ public class Our_Products extends javax.swing.JFrame {
                   String query="INSERT INTO `product_sales`( `productname`,`Whole_price`, `price`) VALUES (?,?,?)";
                   try
                   {        
-                      ps =  MyConnection.connecct_2().prepareStatement(query);
+                      ps =  MyConnection.connecct().prepareStatement(query);
                       ps.setString(1, pname);
                       ps.setString(2, product_price);
                       ps.setString(3, price);
@@ -345,7 +345,7 @@ public class Our_Products extends javax.swing.JFrame {
         
         try 
         {
-            ps=MyConnection.connecct_2().prepareStatement(query);
+            ps=MyConnection.connecct().prepareStatement(query);
             ps.setString(1, pname);
                rs=ps.executeQuery();
             if(rs.next())
@@ -366,7 +366,7 @@ public class Our_Products extends javax.swing.JFrame {
          
          String query="select * from product_sales";
           
-                ps=MyConnection.connecct_2().prepareStatement(query);
+                ps=MyConnection.connecct().prepareStatement(query);
             
                   rs=ps.executeQuery();
                   while(rs.next())            
@@ -419,7 +419,7 @@ public class Our_Products extends javax.swing.JFrame {
                   String query="DELETE FROM `product_sales` WHERE `productname` = ?";
                   try
                   {        
-                      ps =  MyConnection.connecct_2().prepareStatement(query);
+                      ps =  MyConnection.connecct().prepareStatement(query);
                       ps.setString(1, pname);
                       ps.executeUpdate();
                       Update_table();
@@ -466,7 +466,7 @@ public class Our_Products extends javax.swing.JFrame {
      try{
 
         String query="UPDATE `product_sales` SET `price`='"+price+"',`Whole_price`='"+product_price+"' where `productname` ='"+pname+"'";
-        ps =  MyConnection.connecct_2().prepareStatement(query);
+        ps =  MyConnection.connecct().prepareStatement(query);
          ps.execute();
           Update_table();
          JOptionPane.showMessageDialog(null, " Product Updated");

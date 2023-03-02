@@ -12,7 +12,7 @@ public class MyConnection {
     private final static String uri="jdbc:mysql://localhost/cashier_system_database";
    
     
-/****************************Our DataBase**********************************************/
+/****************************Our DataBase***********************************************/
 public static  Connection connecct() {
         Connection con =null;
  try{

@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author marke
  */
 public class Manger_pass extends javax.swing.JFrame {

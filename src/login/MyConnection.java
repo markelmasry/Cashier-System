@@ -6,7 +6,6 @@ import java.sql.*;
 
 public class MyConnection {
     
-    
     private final static String user="root";
     private final static String pass="";
     private final static String uri="jdbc:mysql://localhost/cashier_system_database";

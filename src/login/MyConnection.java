@@ -24,5 +24,4 @@ public static  Connection connecct() {
 return con;
 }
 
-
 }

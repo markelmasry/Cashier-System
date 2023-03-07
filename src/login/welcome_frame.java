@@ -35,6 +35,243 @@ public class welcome_frame extends javax.swing.JFrame {
     ResultSet rs;
     int count=100;
     
+    private void Balance (){
+        double Total = Double.parseDouble(jTextFieldTotal.getText());
+        double pay =Float.parseFloat(jTextFieldPay.getText());
+       
+        if (pay<Total)
+        {
+              JOptionPane.showMessageDialog(null, "pay must be more than Total  ");
+               //handel error by refresh the page
+    
+             
+        }
+        else{
+        float bal= (float)(pay-Total);
+        
+        jTextFieldBalance.setText(String.valueOf(bal));
+        }
+    }
+    private void Bill(){
+            try{
+                   String tota =jTextFieldTotal.getText();
+                   String pay =jTextFieldPay.getText();
+                   String Ballance =jTextFieldBalance.getText();
+                   DefaultTableModel model = new DefaultTableModel();
+                   model = (DefaultTableModel)jTable1.getModel();
+                   jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n");
+                   jTextAreaBill.setText(jTextAreaBill.getText()+"                    BILL                       \n");
+                   jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n\n");
+                   jTextAreaBill.setText(jTextAreaBill.getText()+"              Order Number:"+count+"           \n");
+
+                   //Heading
+                   jTextAreaBill.setText(jTextAreaBill.getText()+"\tProduct"+"\t"+"Price"+"\t"+"Qty"+"\t"+"Amount"+"\n");
+
+                   for(int i=0;i<jTable1.getRowCount();i++)
+                    {
+                       String pname =(String )model.getValueAt(i, 1);
+                       String qty =(String )model.getValueAt(i, 2);
+                       String price =(String )model.getValueAt(i, 3);
+                       String amount =(String )model.getValueAt(i, 4);
+                       jTextAreaBill.setText(jTextAreaBill.getText()+"\t"+pname+"\t"+price+"\t"+qty+"\t"+amount+"\n"); 
+                    }
+
+                    jTextAreaBill.setText(jTextAreaBill.getText()+"\n\n");
+                    jTextAreaBill.setText(jTextAreaBill.getText()+"\t\t"+"\t"+"SubTotal : "+tota+"\n");
+                    jTextAreaBill.setText(jTextAreaBill.getText()+"\t\t"+"\t"+"Pay      : "+pay+"\n");
+                    jTextAreaBill.setText(jTextAreaBill.getText()+"\t\t"+"\t"+"Balance  : "+Ballance+"\n");
+                    jTextAreaBill.setText(jTextAreaBill.getText()+"\n");
+                    jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n");
+                    jTextAreaBill.setText(jTextAreaBill.getText()+"                    THANK YOU                  \n");
+                    jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n");
+                     //**************************************************************************************for total bill***********************************************************************************************/
+                    try {
+                         String tot =jTextFieldTotal.getText();
+                         String pay_ =jTextFieldPay.getText();
+                         String Balla =jTextFieldBalance.getText();  
+                         String filename ="TotalBills.txt";
+
+                         PrintWriter out = new PrintWriter(new FileWriter(filename,true));
+                         out.println("***********************************************\n");
+                         out.println("                    BILL                       \n");
+                         out.println("***********************************************\n\n");
+                         out.println("              Order_Number:"+count+"           \n");
+                         count++;
+                         out.println("Product"+"/"+"Price"+"/"+"Qty"+"/"+"Amount"+"\n");
+                         for(int i=0;i<jTable1.getRowCount();i++)
+                         {
+                             String pname =(String )model.getValueAt(i, 1);
+                             String qty =(String )model.getValueAt(i, 2);
+                             String price =(String )model.getValueAt(i, 3);
+                             String amount =(String )model.getValueAt(i, 4);
+
+                             out.println(pname+"//"+price+"//"+qty+"//"+amount+"\n");
+
+                         }  
+                         out.println("\n\n");
+                         out.println("\t\t"+"\t"+"SubTotal:"+tot+"\n");
+                         out.println("\t\t"+"\t"+"Pay:"+pay_+"\n");
+                         out.println("\t\t"+"\t"+"Balance:"+Balla+"\n");
+                         out.println("\n");
+                         out.println("***********************************************\n");
+                         out.println("                    THANK_YOU                  \n");
+                         out.println("***********************************************\n");
+                         double t=Double.parseDouble(tot);
+                         total+=t;
+                         out.println("total_till_now:"+total);
+
+                         out.close();
+                        }catch (IOException ex) {
+                             System.out.println(ex.getMessage());
+                        }
+                    
+                       }catch(Exception e)
+                        {System.out.println(e.getMessage());}
+                }
+    private void addOrderToDashboard(){
+            try
+            {
+
+            DefaultTableModel model = new DefaultTableModel();
+
+            model = (DefaultTableModel)jTable1.getModel();
+            model.addRow(new Object[]
+
+            {
+
+                jTextFieldP_Code.getText(),
+                jTextFieldP_Name.getText(),
+                jSpinnerQty.getValue().toString(),
+                jTextFieldPrice.getText(),
+                jTextFieldAmount.getText(),
+
+            });
+            if(jTextFieldAmount.getText().equals(""))
+            {
+                 JOptionPane.showMessageDialog(null, "Amount is empty  ");
+                 //handel error by refresh the page
+                  welcome_frame hf=new welcome_frame();
+                    hf.setVisible(true);
+                    hf.pack();
+                    hf.setLocationRelativeTo(null);
+                    hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    this.dispose();
+
+            }   
+
+            else
+            {
+            double sum=0;
+            for(int i=0;i<jTable1.getRowCount();i++)
+            {
+                sum =sum + Double.parseDouble(jTable1.getValueAt(i, 4).toString());
+            }
+
+
+            jTextFieldTotal.setText(Double.toString(sum));
+
+                jTextFieldP_Code.setText("");
+                jTextFieldP_Name.setText("");
+                jTextFieldPrice.setText("");
+                jTextFieldAmount.setText("");
+            }
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+                
+            } 
+    }
+    private void dispaly_icon(){
+        ImageIcon user=new ImageIcon("C:\\Users\\marke\\Documents\\NetBeansProjects\\login\\src\\login\\user.png");
+
+        Image login =user.getImage().getScaledInstance(jLabelicone.getWidth(), jLabelicone.getHeight(), Image.SCALE_SMOOTH);
+        jLabelicone.setIcon(new ImageIcon(login));
+     }
+    private void enterKey(){
+        
+            String pcode = jTextFieldP_Code.getText();
+            String query="select * from product_sales where id =?";
+            try {
+                ps=MyConnection.connecct().prepareStatement(query);
+                  ps.setString(1, pcode);
+                  rs=ps.executeQuery();
+                  if(rs.next()==false)
+                  {
+                       JOptionPane.showMessageDialog(null, "Product Code Not Found  ");
+                       
+                  }
+                  else
+                  {
+                      String pname =rs.getString("productname");
+                      String price =rs.getString("price");
+                      
+                      jTextFieldP_Name.setText(pname);
+                      jTextFieldPrice.setText(price);
+                      
+                  }
+                  
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                Logger.getLogger(welcome_frame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+    }
+    private void qtyChange(){
+       try{
+        int qty = Integer.parseInt(jSpinnerQty.getValue().toString());
+        float price =Float.parseFloat(jTextFieldPrice.getText());
+        
+        float amount= qty* price;
+        
+        jTextFieldAmount.setText(String.valueOf(amount));
+        }
+         catch(Exception e)
+    {System.out.println(e.getMessage());}
+    }
+    private void ourProductsFrame(){
+        try {
+             Our_Products rgf;
+             rgf = new Our_Products();
+             rgf.setVisible(true);
+             rgf.pack();
+             rgf.setLocationRelativeTo(null);
+             rgf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+             this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(welcome_frame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    private void loginFrame(){
+      login_frame login = new login_frame();
+      login.setVisible(true);
+      login.pack();
+      login.setLocationRelativeTo(null);
+      login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.dispose();
+    }
+    private void TotalBillsFrame(){
+      Total_Bills t = new Total_Bills();
+      t.setVisible(true);
+      t.pack();
+      t.setLocationRelativeTo(null);
+      t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.dispose();
+    }
+    private void newOrder(){
+        DefaultTableModel model = new DefaultTableModel();
+        model = (DefaultTableModel)jTable1.getModel();
+        int rowCount = model.getRowCount();
+        //Remove rows one by one from the end of the table
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+        jTextAreaBill.setText("");
+        jTextFieldBalance.setText("");
+          jTextFieldTotal.setText("");
+             jTextFieldPay.setText("");
+    }
+  
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -111,10 +348,10 @@ public class welcome_frame extends javax.swing.JFrame {
                         .addComponent(jLabelicone, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(382, 382, 382)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(162, 162, 162)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 431, Short.MAX_VALUE)
                 .addComponent(jButtonCancel)
                 .addGap(42, 42, 42))
         );
@@ -169,6 +406,11 @@ public class welcome_frame extends javax.swing.JFrame {
         jTextFieldPrice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         jTextFieldP_Code.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jTextFieldP_Code.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldP_CodeActionPerformed(evt);
+            }
+        });
         jTextFieldP_Code.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldP_CodeKeyPressed(evt);
@@ -438,228 +680,21 @@ public class welcome_frame extends javax.swing.JFrame {
  
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-try{
-  
-        DefaultTableModel model = new DefaultTableModel();
-         
-        model = (DefaultTableModel)jTable1.getModel();
-        model.addRow(new Object[]
-        
-        {
-            
-            jTextFieldP_Code.getText(),
-            jTextFieldP_Name.getText(),
-            jSpinnerQty.getValue().toString(),
-            jTextFieldPrice.getText(),
-            jTextFieldAmount.getText(),
-            
-        });
-        if(jTextFieldAmount.getText().equals(""))
-        {
-             JOptionPane.showMessageDialog(null, "Amount is empty  ");
-             //handel error by refresh the page
-              welcome_frame hf=new welcome_frame();
-                hf.setVisible(true);
-                hf.pack();
-                hf.setLocationRelativeTo(null);
-                hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                this.dispose();
-             
-        }   
-  
-        else
-        {
-        double sum=0;
-        for(int i=0;i<jTable1.getRowCount();i++)
-        {
-            sum =sum + Double.parseDouble(jTable1.getValueAt(i, 4).toString());
-        }
-        
-        
-        jTextFieldTotal.setText(Double.toString(sum));
-        
-            jTextFieldP_Code.setText("");
-            jTextFieldP_Name.setText("");
-            jTextFieldPrice.setText("");
-            jTextFieldAmount.setText("");
-        }
-}
-catch(Exception e){
-    System.out.println(e.getMessage());
-    
-    
- 
-} 
-        
+
+       addOrderToDashboard();
+       
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    
-       public void dispaly_icon()
-   {
-        ImageIcon user=new ImageIcon("C:\\Users\\marke\\Documents\\NetBeansProjects\\login\\src\\login\\user.png");
-
-        Image login =user.getImage().getScaledInstance(jLabelicone.getWidth(), jLabelicone.getHeight(), Image.SCALE_SMOOTH);
-        jLabelicone.setIcon(new ImageIcon(login));
-     }
-   
     
     private void jTextFieldP_CodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldP_CodeKeyPressed
-      
-        
+    
         if(evt.getKeyCode()==KeyEvent.VK_ENTER)
-        {
-            String pcode = jTextFieldP_Code.getText();
-           
-            String query="select * from product_sales where id =?";
-            try {
-                ps=MyConnection.connecct().prepareStatement(query);
-                  ps.setString(1, pcode);
-                  rs=ps.executeQuery();
-                  if(rs.next()==false)
-                  {
-                       JOptionPane.showMessageDialog(null, "Product Code Not Found  ");
-                       
-                  }
-                  else
-                  {
-                      String pname =rs.getString("productname");
-                      String price =rs.getString("price");
-                      
-                      jTextFieldP_Name.setText(pname);
-                      jTextFieldPrice.setText(price);
-                      
-                  }
-                  
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-                Logger.getLogger(welcome_frame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-        }
-        
-   
-    }//GEN-LAST:event_jTextFieldP_CodeKeyPressed
+          enterKey(); 
 
-    public void Balance ()
-    {
-        double Total = Double.parseDouble(jTextFieldTotal.getText());
-        double pay =Float.parseFloat(jTextFieldPay.getText());
-       
-        if (pay<Total)
-        {
-              JOptionPane.showMessageDialog(null, "pay must be more than Total  ");
-               //handel error by refresh the page
-    
-             
-        }
-        else{
-        float bal= (float)(pay-Total);
-        
-        jTextFieldBalance.setText(String.valueOf(bal));
-        }
-    }
-    public void Bill()
-    { try{
-        String tota =jTextFieldTotal.getText();
-        String pay =jTextFieldPay.getText();
-        String Ballance =jTextFieldBalance.getText();
-        DefaultTableModel model = new DefaultTableModel();
-        model = (DefaultTableModel)jTable1.getModel();
-        jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"                    BILL                       \n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n\n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"              Order Number:"+count+"           \n");
-        
-        //Heading
-        jTextAreaBill.setText(jTextAreaBill.getText()+"\tProduct"+"\t"+"Price"+"\t"+"Qty"+"\t"+"Amount"+"\n");
-        
-          for(int i=0;i<jTable1.getRowCount();i++)
-        {
-           String pname =(String )model.getValueAt(i, 1);
-           String qty =(String )model.getValueAt(i, 2);
-           String price =(String )model.getValueAt(i, 3);
-           String amount =(String )model.getValueAt(i, 4);
-           
-             jTextAreaBill.setText(jTextAreaBill.getText()+"\t"+pname+"\t"+price+"\t"+qty+"\t"+amount+"\n"); 
-           
-        }
-        
-        jTextAreaBill.setText(jTextAreaBill.getText()+"\n\n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"\t\t"+"\t"+"SubTotal : "+tota+"\n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"\t\t"+"\t"+"Pay      : "+pay+"\n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"\t\t"+"\t"+"Balance  : "+Ballance+"\n");
-        
-        jTextAreaBill.setText(jTextAreaBill.getText()+"\n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"                    THANK YOU                  \n");
-        jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n");
-         //**************************************************************************************for total bill***********************************************************************************************/
-           try {
-            String tot =jTextFieldTotal.getText();
-            String pay_ =jTextFieldPay.getText();
-            String Balla =jTextFieldBalance.getText();  
-            
-            String filename ="TotalBills.txt";
-            
-            PrintWriter out = new PrintWriter(new FileWriter(filename,true));
-            out.println("***********************************************\n");
-            out.println("                    BILL                       \n");
-            out.println("***********************************************\n\n");
-            out.println("              Order_Number:"+count+"           \n");
-            count++;
-            out.println("Product"+"/"+"Price"+"/"+"Qty"+"/"+"Amount"+"\n");
-            for(int i=0;i<jTable1.getRowCount();i++)
-            {
-                String pname =(String )model.getValueAt(i, 1);
-                String qty =(String )model.getValueAt(i, 2);
-                String price =(String )model.getValueAt(i, 3);
-                String amount =(String )model.getValueAt(i, 4);
-                
-                out.println(pname+"//"+price+"//"+qty+"//"+amount+"\n");
-                
-            }  
-            out.println("\n\n");
-            out.println("\t\t"+"\t"+"SubTotal:"+tot+"\n");
-            out.println("\t\t"+"\t"+"Pay:"+pay_+"\n");
-            out.println("\t\t"+"\t"+"Balance:"+Balla+"\n");
-            out.println("\n");
-            out.println("***********************************************\n");
-            out.println("                    THANK_YOU                  \n");
-            out.println("***********************************************\n");
-            double t=Double.parseDouble(tot);
-            total+=t;
-            out.println("total_till_now:"+total);
-            
-            out.close();
-        } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-           
-        } 
-                      
-         
-    }
-    
-    catch(Exception e)
-    {System.out.println(e.getMessage());}
-    }
-  
-    
-    
-    
-    
+    }//GEN-LAST:event_jTextFieldP_CodeKeyPressed
+ 
     private void jSpinnerQtyStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerQtyStateChanged
-        try{
-        int qty = Integer.parseInt(jSpinnerQty.getValue().toString());
-        float price =Float.parseFloat(jTextFieldPrice.getText());
-        
-        float amount= qty* price;
-        
-        jTextFieldAmount.setText(String.valueOf(amount));
-        }
-         catch(Exception e)
-    {System.out.println(e.getMessage());}
-    
+
+        qtyChange();
         
     }//GEN-LAST:event_jSpinnerQtyStateChanged
 
@@ -669,9 +704,11 @@ catch(Exception e){
 
     private void jButtonBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBillActionPerformed
             Balance();
+            
             //for handeling pay smaller than total
             double Total = Double.parseDouble(jTextFieldTotal.getText());
             double pay =Float.parseFloat(jTextFieldPay.getText());
+            
             if(Double.valueOf(pay)>=Double.valueOf(Total))
             {
                 Bill();
@@ -693,55 +730,29 @@ catch(Exception e){
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        try {
-             Our_Products rgf;
-             rgf = new Our_Products();
-             rgf.setVisible(true);
-             rgf.pack();
-             rgf.setLocationRelativeTo(null);
-             rgf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-             this.dispose();
-        } catch (SQLException ex) {
-            Logger.getLogger(welcome_frame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ourProductsFrame();
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-              login_frame login = new login_frame();
-      login.setVisible(true);
-      login.pack();
-      login.setLocationRelativeTo(null);
-      login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.dispose();
+        loginFrame();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
       
-      Total_Bills t = new Total_Bills();
-      t.setVisible(true);
-      t.pack();
-      t.setLocationRelativeTo(null);
-      t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.dispose();
+      TotalBillsFrame();
       
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         
-        DefaultTableModel model = new DefaultTableModel();
-        model = (DefaultTableModel)jTable1.getModel();
-        int rowCount = model.getRowCount();
-        //Remove rows one by one from the end of the table
-        for (int i = rowCount - 1; i >= 0; i--) {
-            model.removeRow(i);
-        }
-        jTextAreaBill.setText("");
-        jTextFieldBalance.setText("");
-          jTextFieldTotal.setText("");
-             jTextFieldPay.setText("");
+      newOrder();
 
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTextFieldP_CodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldP_CodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldP_CodeActionPerformed
 
     /**
      * @param args the command line arguments

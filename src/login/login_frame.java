@@ -7,11 +7,9 @@ package login;
 
 import java.awt.Image;
 import javax.swing.JFrame;
-
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -29,7 +27,67 @@ public class login_frame extends javax.swing.JFrame {
       
     
     }
+      
+      PreparedStatement ps;
+      ResultSet rs;
+  
+    
+    private void login(String email,String pass){
+       
+        String query="SELECT * FROM `user_data` WHERE `email` =? AND `password` =?";
+        
+        try {
+            ps=MyConnection.connecct().prepareStatement(query);
+            
+            ps.setString(1, email);
+            ps.setString(2, pass);
+            
+            rs=ps.executeQuery();
+            if(rs.next())
+            {
+                welcome_frame hf=new welcome_frame();
+                hf.setVisible(true);
+                hf.pack();
+                hf.setLocationRelativeTo(null);
+                hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                hf.jLabel3.setText("Hello :  "+email+" ");
+                
+                this.dispose();
+                
+                
+            }
+            else {
+             JOptionPane.showMessageDialog(null, "incorrect User name or password  ");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(login_frame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    private void dispaly_icon(){
+        ImageIcon user=new ImageIcon("C:\\Users\\marke\\Documents\\NetBeansProjects\\login\\src\\login\\user.png");
 
+        Image login =user.getImage().getScaledInstance(jLabel4.getWidth(), jLabel4.getHeight(), Image.SCALE_SMOOTH);
+        jLabel4.setIcon(new ImageIcon(login));
+     }
+    private void RegisterFrame(){
+      Manger_pass rgf = new Manger_pass();
+      rgf.setVisible(true);
+      rgf.pack();
+      rgf.setLocationRelativeTo(null);
+      rgf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.dispose();
+    }
+    private void closeWindow(){
+        System.exit(0);
+    }
+    private void minimumWindow(){
+          this.setState(JFrame.ICONIFIED);
+    }
+    private void cancelWindow(){
+        System.exit(0);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -240,74 +298,35 @@ public class login_frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabelcloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelcloseMouseClicked
-     System.exit(0);
+         closeWindow();
     }//GEN-LAST:event_jLabelcloseMouseClicked
 
     private void jLabelMinMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMinMouseClicked
-       this.setState(JFrame.ICONIFIED);
+         minimumWindow();
     }//GEN-LAST:event_jLabelMinMouseClicked
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-         System.exit(0);
+         cancelWindow();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonloginActionPerformed
       
-        PreparedStatement ps;
-        ResultSet rs;
+      
          String email = jTextField_Email.getText();
-          
-            String pass = String.valueOf(jPasswordField1.getPassword());
-        
-        String query="SELECT * FROM `user_data` WHERE `email` =? AND `password` =?";
-        try {
-            ps=MyConnection.connecct().prepareStatement(query);
+         String pass = String.valueOf(jPasswordField1.getPassword());
             
-            ps.setString(1, email);
-            ps.setString(2, pass);
-            
-            rs=ps.executeQuery();
-            if(rs.next())
-            {
-                welcome_frame hf=new welcome_frame();
-                hf.setVisible(true);
-                hf.pack();
-                hf.setLocationRelativeTo(null);
-                hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                hf.jLabel3.setText("Hello :  "+email+" ");
-                
-                this.dispose();
-                
-                
-            }
-            else {
-             JOptionPane.showMessageDialog(null, "incorrect User name or password  ");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(login_frame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+         login(email,pass);
+       
     }//GEN-LAST:event_jButtonloginActionPerformed
 
-   public void dispaly_icon()
-   {
-        ImageIcon user=new ImageIcon("C:\\Users\\marke\\Documents\\NetBeansProjects\\login\\src\\login\\user.png");
-
-        Image login =user.getImage().getScaledInstance(jLabel4.getWidth(), jLabel4.getHeight(), Image.SCALE_SMOOTH);
-        jLabel4.setIcon(new ImageIcon(login));
-     }
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void jLabelRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegisterMouseClicked
-      Manger_pass rgf = new Manger_pass();
-      rgf.setVisible(true);
-      rgf.pack();
-      rgf.setLocationRelativeTo(null);
-      rgf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.dispose();
+      
+        RegisterFrame();
+        
     }//GEN-LAST:event_jLabelRegisterMouseClicked
 
   

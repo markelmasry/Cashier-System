@@ -4,6 +4,7 @@
  */
 package login;
 
+import controll.managerPassword_operation;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -172,38 +173,10 @@ public class Manger_pass extends javax.swing.JFrame {
 
     private void jButtonloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonloginActionPerformed
       
-        PreparedStatement ps;
-        ResultSet rs;
-         String email = "Manger.Cahser";
-          
-            String pass = String.valueOf(jPasswordField1.getPassword());
-        
-        String query="SELECT * FROM `user_data` WHERE `email` =? AND `password` =?";
-        try {
-            ps=MyConnection.connecct().prepareStatement(query);
-            
-            ps.setString(1, email);
-            ps.setString(2, pass);
-            
-            rs=ps.executeQuery();
-            if(rs.next())
-            {
-                welcome_manger rg=new welcome_manger();
-                rg.setVisible(true);
-                rg.pack();
-                rg.setLocationRelativeTo(null);
-                rg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-                this.dispose();
-                
-                
-            }
-            else {
-             JOptionPane.showMessageDialog(null, "incorrect password  ");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(login_frame.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        
+        String email = "Manger.Cahser";
+          String query="SELECT * FROM `user_data` WHERE `email` =? AND `password` =?";
+      String pass = String.valueOf(jPasswordField1.getPassword());
+      managerPassword_operation.mangerPassword(query,email, pass,true);
         
         
     }//GEN-LAST:event_jButtonloginActionPerformed

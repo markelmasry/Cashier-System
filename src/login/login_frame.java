@@ -5,6 +5,7 @@
 package login;
 
 
+import controll.login_operation;
 import java.awt.Image;
 import javax.swing.JFrame;
 import java.sql.*;
@@ -27,44 +28,7 @@ public class login_frame extends javax.swing.JFrame {
       
     
     }
-      
-      PreparedStatement ps;
-      ResultSet rs;
-  
-    
-    private void login(String email,String pass){
        
-        String query="SELECT * FROM `user_data` WHERE `email` =? AND `password` =?";
-        
-        try {
-            ps=MyConnection.connecct().prepareStatement(query);
-            
-            ps.setString(1, email);
-            ps.setString(2, pass);
-            
-            rs=ps.executeQuery();
-            if(rs.next())
-            {
-                welcome_frame hf=new welcome_frame();
-                hf.setVisible(true);
-                hf.pack();
-                hf.setLocationRelativeTo(null);
-                hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                hf.jLabel3.setText("Hello :  "+email+" ");
-                
-                this.dispose();
-                
-                
-            }
-            else {
-             JOptionPane.showMessageDialog(null, "incorrect User name or password  ");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(login_frame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-    }
     private void dispaly_icon(){
         ImageIcon user=new ImageIcon("C:\\Users\\marke\\Documents\\NetBeansProjects\\login\\src\\login\\user.png");
 
@@ -72,13 +36,14 @@ public class login_frame extends javax.swing.JFrame {
         jLabel4.setIcon(new ImageIcon(login));
      }
     private void RegisterFrame(){
+      this.dispose();
       Manger_pass rgf = new Manger_pass();
       rgf.setVisible(true);
       rgf.pack();
       rgf.setLocationRelativeTo(null);
       rgf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.dispose();
-    }
+  
+    } 
     private void closeWindow(){
         System.exit(0);
     }
@@ -312,10 +277,10 @@ public class login_frame extends javax.swing.JFrame {
     private void jButtonloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonloginActionPerformed
       
       
-         String email = jTextField_Email.getText();
-         String pass = String.valueOf(jPasswordField1.getPassword());
-            
-         login(email,pass);
+        String email = jTextField_Email.getText();          
+        String pass = String.valueOf(jPasswordField1.getPassword());
+        login_operation.get_email_and_password_data(email, pass,true);
+       
        
     }//GEN-LAST:event_jButtonloginActionPerformed
 
@@ -384,4 +349,5 @@ public class login_frame extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField_Email;
     // End of variables declaration//GEN-END:variables
+
 }

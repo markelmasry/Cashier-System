@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Order_Model.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;login&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Modeling</a> &gt; <span class="el_source">Order_Model.java</span></div><h1>Order_Model.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Modeling;
+
+/**
+ *
+ * @author marke
+ */
+public class Order_Model {
+    private String Name, Code,Qty,Price,Amount;
+
+<span class="fc" id="L14">    public Order_Model(String Name, String Code, String Qty, String Price, String Amount) {</span>
+<span class="fc" id="L15">        this.Name = Name;</span>
+<span class="fc" id="L16">        this.Code = Code;</span>
+<span class="fc" id="L17">        this.Qty = Qty;</span>
+<span class="fc" id="L18">        this.Price = Price;</span>
+<span class="fc" id="L19">        this.Amount = Amount;</span>
+<span class="fc" id="L20">    }</span>
+    
+    
+    
+    public String getName() {
+<span class="nc" id="L25">        return Name;</span>
+    }
+
+    public void setName(String Name) {
+<span class="nc" id="L29">        this.Name = Name;</span>
+<span class="nc" id="L30">    }</span>
+
+    public String getCode() {
+<span class="nc" id="L33">        return Code;</span>
+    }
+
+    public void setCode(String Code) {
+<span class="nc" id="L37">        this.Code = Code;</span>
+<span class="nc" id="L38">    }</span>
+
+    public String getQty() {
+<span class="nc" id="L41">        return Qty;</span>
+    }
+
+    public void setQty(String Qty) {
+<span class="nc" id="L45">        this.Qty = Qty;</span>
+<span class="nc" id="L46">    }</span>
+
+    public String getPrice() {
+<span class="nc" id="L49">        return Price;</span>
+    }
+
+    public void setPrice(String Price) {
+<span class="nc" id="L53">        this.Price = Price;</span>
+<span class="nc" id="L54">    }</span>
+
+    public String getAmount() {
+<span class="nc" id="L57">        return Amount;</span>
+    }
+
+    public void setAmount(String Amount) {
+<span class="nc" id="L61">        this.Amount = Amount;</span>
+<span class="nc" id="L62">    }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L66">        return &quot;Order_Model{&quot; + &quot;Name=&quot; + Name + &quot;, Code=&quot; + Code + &quot;, Qty=&quot; + Qty + &quot;, Price=&quot; + Price + &quot;, Amount=&quot; + Amount + '}';</span>
+    }
+
+
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

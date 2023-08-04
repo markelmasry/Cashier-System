@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Database_Opreations.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;login&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Modeling</a> &gt; <span class="el_source">Database_Opreations.java</span></div><h1>Database_Opreations.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Modeling;
+
+
+import controll.Our_Product_Opreations;
+import controll.Tables_Opreations;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import login.regstration;
+
+
+   
+/**
+ *
+ * @author marke
+ */
+<span class="fc" id="L24">public class Database_Opreations implements Database_Operation {</span>
+     
+    static Connection con;
+    static PreparedStatement ps;   
+    static ResultSet rs;
+    
+    
+    public static ResultSet getData(String Query , String pcode,boolean checking){
+     try {
+<span class="fc bfc" id="L33" title="All 2 branches covered.">         if (checking== false)</span>
+<span class="fc" id="L34">                 throw new SQLException();</span>
+         
+<span class="fc" id="L36">        ps=MyConnection.connecct().prepareStatement(Query);</span>
+<span class="fc" id="L37">        ps.setString(1, pcode);</span>
+<span class="fc" id="L38">        rs=ps.executeQuery();</span>
+<span class="fc" id="L39">        return rs;</span>
+         
+<span class="fc" id="L41">     } catch(SQLException ex)</span>
+            {
+<span class="fc" id="L43">             System.out.println(ex.getMessage());</span>
+            
+            }
+<span class="fc" id="L46">        return null;</span>
+    }
+    
+     public static ResultSet get_email_and_password (String Query , String email,String password,boolean checking) {
+        try { 
+<span class="fc bfc" id="L51" title="All 2 branches covered.">             if (checking== false)</span>
+<span class="fc" id="L52">                 throw new SQLException();</span>
+<span class="fc" id="L53">            ps=MyConnection.connecct().prepareStatement(Query);</span>
+            
+<span class="fc" id="L55">            ps.setString(1, email);</span>
+<span class="fc" id="L56">            ps.setString(2, password);</span>
+            
+<span class="fc" id="L58">            rs=ps.executeQuery();</span>
+<span class="fc" id="L59">            return rs;</span>
+        } 
+<span class="fc" id="L61">         catch(SQLException ex)</span>
+            {
+<span class="fc" id="L63">             System.out.println(ex.getMessage());</span>
+            
+            }
+<span class="fc" id="L66">        return null; </span>
+        }
+ public  boolean employee_data (String Query,String fname,String lname , String email,String password,boolean checking) {
+<span class="fc" id="L69">        boolean flag=false;</span>
+        try
+                  {  
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                      if (checking==false)</span>
+<span class="fc" id="L73">                          throw new SQLException();</span>
+                      
+<span class="fc" id="L75">                      ps =  MyConnection.connecct().prepareStatement(Query);</span>
+<span class="fc" id="L76">                      ps.setString(1, fname);</span>
+                      
+                    /* 
+                      if(lname!=null)
+                      {
+                           ps.setString(2, lname);
+                           flag= true;
+                      }
+                      else
+                      {
+                           ps.setNull(2, 0);
+                           flag= false;
+                      }
+                      ps.setString(3, email);
+                      ps.setString(4, password);
+                     */
+                    
+<span class="fc" id="L93">                           JOptionPane.showMessageDialog(null, &quot;New user Added&quot;);</span>
+                           
+<span class="fc" id="L95">                           flag= true;</span>
+                      
+                      
+                    } 
+<span class="fc" id="L99">                     catch(SQLException ex)</span>
+                    {
+<span class="fc" id="L101">                     System.out.println(ex.getMessage());</span>
+<span class="fc" id="L102">                     flag= false;</span>
+<span class="fc" id="L103">                    }</span>
+                    
+<span class="fc" id="L105">      return flag;</span>
+    }
+public static boolean  check_email(String query,String email,boolean checking)
+{
+<span class="fc" id="L109">        boolean checkuser=false;</span>
+        //String query=&quot;SELECT * FROM `user_data` WHERE `email` =?&quot;;
+        
+        try 
+        {
+<span class="fc bfc" id="L114" title="All 2 branches covered.">            if(checking==false)</span>
+<span class="fc" id="L115">                   throw new SQLException();</span>
+            
+<span class="fc" id="L117">            ps=MyConnection.connecct().prepareStatement(query);</span>
+<span class="fc" id="L118">            ps.setString(1, email);</span>
+<span class="fc" id="L119">               rs=ps.executeQuery();</span>
+               
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            if(rs.next())</span>
+            {
+<span class="fc" id="L123">                checkuser=true;</span>
+            }
+        } 
+<span class="fc" id="L126">        catch(SQLException ex)</span>
+                    {
+<span class="fc" id="L128">                     System.out.println(ex.getMessage());</span>
+                    
+<span class="fc" id="L130">                    }</span>
+<span class="fc" id="L131">        return checkuser;</span>
+}
+public static boolean  check_pass(String password) {
+
+<span class="fc" id="L135">    Pattern specailCharPatten = Pattern.compile(&quot;[^a-z0-9 ]&quot;, Pattern.CASE_INSENSITIVE);</span>
+<span class="fc" id="L136">    Pattern UpperCasePatten = Pattern.compile(&quot;[A-Z ]&quot;);</span>
+<span class="fc" id="L137">    Pattern lowerCasePatten = Pattern.compile(&quot;[a-z ]&quot;);</span>
+<span class="fc" id="L138">    Pattern digitCasePatten = Pattern.compile(&quot;[0-9 ]&quot;);</span>
+ 
+
+<span class="fc" id="L141">    boolean flag=true;</span>
+
+<span class="fc bfc" id="L143" title="All 2 branches covered.">    if (password.length() &lt; 8) {</span>
+<span class="fc" id="L144">        JOptionPane.showMessageDialog(null,&quot;Password lenght must have alleast 8 character !!&quot;);</span>
+<span class="fc" id="L145">        flag=false;</span>
+    }
+<span class="fc bfc" id="L147" title="All 2 branches covered.">    else if (!specailCharPatten.matcher(password).find()) {</span>
+<span class="fc" id="L148">         JOptionPane.showMessageDialog(null,&quot;Password must have atleast one specail character !!&quot;);</span>
+<span class="fc" id="L149">        flag=false;</span>
+    }
+<span class="fc bfc" id="L151" title="All 2 branches covered.">    else if (!UpperCasePatten.matcher(password).find()) {</span>
+<span class="fc" id="L152">         JOptionPane.showMessageDialog(null,&quot;Password must have atleast one uppercase character !!&quot;);</span>
+<span class="fc" id="L153">        flag=false;</span>
+    }
+<span class="fc bfc" id="L155" title="All 2 branches covered.">    else if (!lowerCasePatten.matcher(password).find()) {</span>
+<span class="fc" id="L156">         JOptionPane.showMessageDialog(null,&quot;Password must have atleast one lowercase character !!&quot;);</span>
+<span class="fc" id="L157">        flag=false;</span>
+    }
+<span class="fc bfc" id="L159" title="All 2 branches covered.">    else if (!digitCasePatten.matcher(password).find()) {</span>
+<span class="fc" id="L160">         JOptionPane.showMessageDialog(null,&quot;Password must have atleast one digit character !!&quot;);</span>
+<span class="fc" id="L161">        flag=false;</span>
+    }
+
+<span class="fc" id="L164">    return flag;</span>
+
+}
+    public static ResultSet Search_emp(String query,String id,boolean checking){
+        try {
+<span class="fc bfc" id="L169" title="All 2 branches covered.">             if (checking== false)</span>
+<span class="fc" id="L170">                 throw new SQLException();</span>
+<span class="fc" id="L171">                ps=MyConnection.connecct().prepareStatement(query);</span>
+
+<span class="fc" id="L173">                ps.setString(1, id);</span>
+<span class="fc" id="L174">                rs=ps.executeQuery();</span>
+
+<span class="fc" id="L176">             return rs;</span>
+            } 
+<span class="fc" id="L178">           catch(SQLException ex)</span>
+            {
+<span class="fc" id="L180">             System.out.println(ex.getMessage());</span>
+             
+            }
+<span class="fc" id="L183">        return null;</span>
+    }
+    public static ResultSet check_manager_password(String query,String email,String password,boolean checking){
+        PreparedStatement ps;
+        ResultSet rs;
+        
+        try {
+<span class="fc bfc" id="L190" title="All 2 branches covered.">            if (checking== false)</span>
+<span class="fc" id="L191">                 throw new SQLException();</span>
+<span class="fc" id="L192">            ps=MyConnection.connecct().prepareStatement(query);</span>
+<span class="fc" id="L193">             ps.setString(1, email);</span>
+<span class="fc" id="L194">            ps.setString(2, password);</span>
+            
+            
+<span class="fc" id="L197">            rs=ps.executeQuery();</span>
+                
+<span class="fc" id="L199">        return rs;</span>
+          
+<span class="fc" id="L201">        } catch(SQLException ex)</span>
+            {
+<span class="fc" id="L203">             System.out.println(ex.getMessage());</span>
+             
+            }
+<span class="fc" id="L206">        return null;</span>
+            
+    }
+     
+     public  boolean addData(String Query, String pname , String customerprice , String productprice ,boolean checking){
+       try
+<span class="fc bfc" id="L212" title="All 2 branches covered.">                  {       if (checking== false)</span>
+<span class="fc" id="L213">                              throw new SQLException(); </span>
+<span class="fc" id="L214">                      ps = MyConnection.connecct().prepareStatement(Query);</span>
+<span class="fc" id="L215">                      ps.setString(1, pname);</span>
+<span class="fc" id="L216">                      ps.setString(2, productprice);</span>
+<span class="fc" id="L217">                      ps.setString(3, customerprice);</span>
+                      
+<span class="fc" id="L219">                      ps.executeUpdate();</span>
+                      
+                        //  Tables_Opreations.Update_Product_table(jTable1);
+<span class="fc" id="L222">                          JOptionPane.showMessageDialog(null, &quot;New Product Added&quot;);</span>
+<span class="fc" id="L223">                             return true;</span>
+                      
+                    } 
+<span class="fc" id="L226">                     catch(SQLException ex)</span>
+            {
+<span class="fc" id="L228">             System.out.println(ex.getMessage());</span>
+<span class="fc" id="L229">             return false;</span>
+            }
+         
+    }
+    
+     public  boolean deleteData(String Query, String pname ,boolean checking ){
+           try
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                  {       if(checking==false) </span>
+<span class="fc" id="L237">                            throw new SQLException();</span>
+<span class="fc" id="L238">                      ps = MyConnection.connecct().prepareStatement(Query);</span>
+<span class="fc" id="L239">                      ps.setString(1, pname);</span>
+<span class="fc" id="L240">                      ps.executeUpdate();</span>
+                  //    Tables_Opreations.Update_Product_table(jTable1);
+<span class="fc" id="L242">                      JOptionPane.showMessageDialog(null, &quot; Product Deleted&quot;);</span>
+<span class="fc" id="L243">                      return true;   </span>
+                  } 
+<span class="fc" id="L245">                  catch (SQLException ex)</span>
+                    {
+<span class="fc" id="L247">                        System.out.println(ex.getMessage());</span>
+<span class="fc" id="L248">                        return false;</span>
+                    }
+     } 
+     
+    public  boolean editData(String Query, String pname , String customerprice , String productprice ,boolean checking ){
+                
+     try{
+<span class="fc bfc" id="L255" title="All 2 branches covered.">             if(checking==false) </span>
+<span class="fc" id="L256">                    throw new SQLException();</span>
+
+<span class="fc" id="L258">        String query=&quot;UPDATE `product_sales` SET `price`='&quot;+customerprice+&quot;',`Whole_price`='&quot;+productprice+&quot;' where `productname` ='&quot;+pname+&quot;'&quot;;</span>
+<span class="fc" id="L259">        ps =  MyConnection.connecct().prepareStatement(query);</span>
+<span class="fc" id="L260">        ps.execute();</span>
+        //Tables_Opreations.Update_Product_table(jTable1);
+<span class="fc" id="L262">        JOptionPane.showMessageDialog(null, &quot; Product Updated&quot;);</span>
+<span class="fc" id="L263">           return true;</span>
+        }
+<span class="fc" id="L265">      catch (SQLException ex)</span>
+                    {
+<span class="fc" id="L267">                        System.out.println(ex.getMessage());</span>
+<span class="fc" id="L268">                        return false;</span>
+                    }
+     
+                
+    }
+    
+      public  boolean check_pname(String pname,boolean checking){
+         
+<span class="fc" id="L276">        boolean checkuser=false;</span>
+<span class="fc" id="L277">         String query=&quot;SELECT * FROM `product_sales` WHERE `productname` =?&quot;;</span>
+        
+        try 
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        {       if (checking== false)</span>
+<span class="fc" id="L281">                 throw new SQLException();</span>
+<span class="fc" id="L282">            ps=MyConnection.connecct().prepareStatement(query);</span>
+<span class="fc" id="L283">            ps.setString(1, pname);</span>
+<span class="fc" id="L284">               rs=ps.executeQuery();</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">            if(rs.next())</span>
+            {
+<span class="fc" id="L287">                checkuser=true;</span>
+            }
+        } 
+<span class="fc" id="L290">       catch(SQLException ex)</span>
+            {
+<span class="fc" id="L292">             System.out.println(ex.getMessage());</span>
+             
+<span class="fc" id="L294">            }</span>
+<span class="fc" id="L295">        return checkuser;</span>
+     
+     }
+     public static  ResultSet show_table () throws SQLException
+    {
+         
+<span class="nc" id="L301">                String query=&quot;select * from product_sales&quot;;</span>
+          
+<span class="nc" id="L303">                ps=MyConnection.connecct().prepareStatement(query);</span>
+            
+<span class="nc" id="L305">                  rs=ps.executeQuery();</span>
+<span class="nc" id="L306">                  return rs;</span>
+     
+    }
+     public static ResultSet show_empolyee_table() throws SQLException{
+         
+<span class="nc" id="L311">        String query=&quot;select * from user_data&quot;;</span>
+<span class="nc" id="L312">        ps=Modeling.MyConnection.connecct().prepareStatement(query);</span>
+<span class="nc" id="L313">        rs=ps.executeQuery();</span>
+<span class="nc" id="L314">         return rs;</span>
+     }
+     public static boolean edit_empolyee(String Query,boolean checking ){
+        try {
+<span class="fc bfc" id="L318" title="All 2 branches covered.">             if (checking== false)</span>
+<span class="fc" id="L319">                 throw new SQLException();</span>
+<span class="fc" id="L320">            ps =  Modeling.MyConnection.connecct().prepareStatement(Query);</span>
+<span class="fc" id="L321">            ps.execute();</span>
+<span class="fc" id="L322">            JOptionPane.showMessageDialog(null, &quot; employee Updated&quot;);</span>
+<span class="fc" id="L323">            return true;</span>
+<span class="fc" id="L324">        } catch(SQLException ex)</span>
+            {
+<span class="fc" id="L326">             System.out.println(ex.getMessage());</span>
+<span class="fc" id="L327">             return false;</span>
+            }
+        }
+               
+      
+        public static boolean Delete_Empolyee(String Query,String email,boolean checking ){
+                
+        try
+<span class="fc bfc" id="L335" title="All 2 branches covered.">            {if(checking==false) </span>
+<span class="fc" id="L336">                    throw new SQLException();</span>
+<span class="fc" id="L337">                ps =  Modeling.MyConnection.connecct().prepareStatement(Query);</span>
+<span class="fc" id="L338">                ps.setString(1, email);</span>
+<span class="fc" id="L339">                ps.executeUpdate();</span>
+                //Tables_Opreations.Update_Empolyee_table(jTable1);
+<span class="fc" id="L341">                JOptionPane.showMessageDialog(null, &quot; employee Deleted&quot;);</span>
+<span class="fc" id="L342">                return true;</span>
+              
+            }
+<span class="fc" id="L345">            catch (SQLException ex)</span>
+            {
+<span class="fc" id="L347">                System.out.println(ex.getMessage());</span>
+<span class="fc" id="L348">               return false;</span>
+
+
+            }
+               
+      }
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

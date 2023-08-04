@@ -4,15 +4,17 @@
  */
 package login;
 
-import com.sun.jdi.connect.spi.Connection;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
+import controll.Tables_Opreations;
+import controll.Search_emp_operation;
+import controll.dashboard_emp_opreations;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author marke
@@ -25,14 +27,12 @@ public class dashboard_emp extends javax.swing.JFrame {
     public dashboard_emp() {
         initComponents();
         try {
-            show_table();
+            Tables_Opreations.Show_Empolyee_table(jTable1);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(dashboard_emp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
-     Connection con;
-    PreparedStatement ps;   
-    ResultSet rs;
+ 
 
 
     /**
@@ -290,137 +290,35 @@ public class dashboard_emp extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        String email = jTextFieldP_Email.getText();
-
-        if(email.equals(""))
-        {
-            JOptionPane.showMessageDialog(null, " Add email  ");
+            String email = jTextFieldP_Email.getText();
+            String query="SELECT * FROM `user_data` WHERE `email` =?";
+            boolean checking = true;
+            dashboard_emp_opreations.Delete_Empolyee(query,email,checking);
+        try {
+            Tables_Opreations.Update_Empolyee_table(jTable1);
+        } catch (SQLException ex) {
+            Logger.getLogger(dashboard_emp.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        else if (!check_email(email))
-                {
-                    JOptionPane.showMessageDialog(null, " Email is already exist  ");
-                }
-
-        else
-        {
-
-            String query="DELETE FROM `user_data` WHERE `email` = ?";
-            try
-            {
-                ps =  MyConnection.connecct().prepareStatement(query);
-                ps.setString(1, email);
-                ps.executeUpdate();
-                Update_table();
-                JOptionPane.showMessageDialog(null, " Product Deleted");
-              
-            }
-            catch (SQLException ex)
-            {
-                System.out.println(ex.getMessage());
-                
-                System.out.println(ex.getMessage());
-
-            }
-
-        }
+      
 
     }//GEN-LAST:event_jButton2ActionPerformed
-public boolean  check_email(String email)
-{
-        PreparedStatement ps;
-        ResultSet rs;
-        boolean checkuser=false;
-         String query="SELECT * FROM `user_data` WHERE `email` =?";
-        
-        try 
-        {
-            ps=MyConnection.connecct().prepareStatement(query);
-            ps.setString(1, email);
-               rs=ps.executeQuery();
-            if(rs.next())
-            {
-                checkuser=true;
-            }
-        } 
-        catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(regstration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        return checkuser;
-}
 
-    public void show_table() throws SQLException
-    {
-         
-         String query="select * from user_data";
-          
-                ps=MyConnection.connecct().prepareStatement(query);
-            
-                  rs=ps.executeQuery();
-                  while(rs.next())            
-                  {
-                       String id =String.valueOf(rs.getInt("id"));
-                    String fname =rs.getString("fname");
-                    String lname=rs.getString("lname");
-                    String email =rs.getString("email");
-                    
-                      
-                      
-                      String data []={id,fname,lname,email};
-                         DefaultTableModel model = new DefaultTableModel();
-                         model = (DefaultTableModel)jTable1.getModel();
-                         model.addRow(data);
-                         
-                  }
-    }
-     public void Update_table() throws SQLException
-    {
-        DefaultTableModel model = new DefaultTableModel(); 
-        model = (DefaultTableModel)jTable1.getModel();
-        model.setRowCount(0);
-        show_table();
-     
-    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
         String email = jTextFieldP_Email.getText();
         String lname = jTextFieldLname.getText();
         String fname = jTextFieldFname.getText();
-
-        if(email.equals(""))
-        {
-            JOptionPane.showMessageDialog(null, " Add email name ");
+        String Query="UPDATE `user_data` SET `fname`='"+fname+"',`lname`='"+lname+"' where `email` ='"+email+"'";
+        String query="SELECT * FROM `user_data` WHERE `email` =?";
+        boolean checking = true;
+        dashboard_emp_opreations.Edit_Empolyee(Query,query,email, fname,lname,checking);
+        
+        try {
+            Tables_Opreations.Update_Empolyee_table(jTable1);
+        } catch (SQLException ex) {
+            Logger.getLogger(dashboard_emp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        else if(fname.equals(""))
-        {
-            JOptionPane.showMessageDialog(null, " Add an firstname ");
-        }
-        else if(lname.equals(""))
-        {
-            JOptionPane.showMessageDialog(null, " Add an lastname ");
-        }
-        else if (!check_email(email))
-        {
-            JOptionPane.showMessageDialog(null, " this email dosent exist  ");
-        }
-        else{
-            try{
-
-                String query="UPDATE `user_data` SET `fname`='"+fname+"',`lname`='"+lname+"' where `email` ='"+email+"'";
-                ps =  MyConnection.connecct().prepareStatement(query);
-                ps.execute();
-                Update_table();
-                JOptionPane.showMessageDialog(null, " employee Updated");
-                
-            }
-            catch (SQLException ex)
-            {
-                System.out.println(ex.getMessage());
-               
-                
-
-            }
-        }
+    
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

@@ -125,19 +125,12 @@ public class Total_Bills extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-       try {
-              Our_Products hf= new Our_Products();
-               hf.setVisible(true);
-                hf.pack();
-                hf.setLocationRelativeTo(null);
-                hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                this.dispose();
-                
-                
-                
-        } catch (SQLException ex) {
-            Logger.getLogger(Our_Products.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        welcome_frame hf= new welcome_frame();
+        hf.setVisible(true);
+        hf.pack();
+        hf.setLocationRelativeTo(null);
+        hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.dispose();
     }//GEN-LAST:event_jLabel2MouseClicked
 
      public void show_bill()

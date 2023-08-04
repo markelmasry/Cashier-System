@@ -10,6 +10,8 @@ package login;
  * @author marke
  */
 
+import controll.SreachFrame_Opreations;
+import Modeling.Product_Model;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -195,32 +197,9 @@ ResultSet rs;
          String id = jTextField1.getText();
 
 
-               
-                if(id.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add product code ");
-                }
-                   
-    
-                else
-                {
-
-                 String query="select * from product_sales  WHERE `id` =? ";
-                 try {
-                    ps=MyConnection.connecct().prepareStatement(query);
-
-                    ps.setString(1, id);
-                    rs=ps.executeQuery();
-
-                    if(rs.next())
-                    {
-                        String id_ =String.valueOf(rs.getInt("id"));
-                      String pname =rs.getString("productname");
-                      String Whole_price=rs.getString("Whole_price");
-                      String price =rs.getString("price");
-                      
-                      
-                      String data []={id_,pname,Whole_price,price};
+          Product_Model p= SreachFrame_Opreations.get_product_data(id,true);
+         String data []={p.getProductCode(),p.getProductname(),p.getProductprice(),p.getCustomerprice()};
+         
                          DefaultTableModel model = new DefaultTableModel();
                          model = (DefaultTableModel)jTable1.getModel();
                         
@@ -230,17 +209,6 @@ ResultSet rs;
                                 model.removeRow(i);
                             }
                          model.addRow(data);
-
-
-                    }
-                    else {
-                     JOptionPane.showMessageDialog(null, "this product dosent  exist   ");
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(login_frame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                  
-                }
         
     }//GEN-LAST:event_jButtonSearchActionPerformed
 

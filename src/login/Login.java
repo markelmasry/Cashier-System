@@ -20,7 +20,7 @@ public class Login {
          
          
          String query;
-        MyConnection c1 =new MyConnection();
+        Modeling.MyConnection c1 =new Modeling.MyConnection();
         Connection c =c1.connecct();
         
       login_frame login = new login_frame();

@@ -4,6 +4,7 @@
  */
 package login;
 
+import controll.regstration_operation;
 import javax.swing.JFrame;
 
 import java.sql.*;
@@ -352,123 +353,11 @@ public class regstration extends javax.swing.JFrame {
       String re_email = jTextField_REEMAIL.getText();
       String pass = String.valueOf(jPasswordField_PASS.getPassword());
       String re_pass = String.valueOf(jPasswordFieldREPASS.getPassword());
-
-               
-                if(fname.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add first name ");
-                }
-                if(email.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add an email ");
-                }
-                else if(!email.equals(re_email))
-                {
-                    JOptionPane.showMessageDialog(null, " email dont matched ");
-                }
-                else if(pass.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add a password ");
-                }
-                else if(!pass.equals(re_pass))
-                {
-                    JOptionPane.showMessageDialog(null, " password dont matched ");
-                }
-                else if (check_email(email))
-                {
-                    JOptionPane.showMessageDialog(null, " Email is already exist  ");
-                }
-                 else if (!check_pass( pass))
-                {
-                   JOptionPane.showMessageDialog(null, " Enter anthoer pass"); 
-                }
-    
-                else
-                {
-
-                  PreparedStatement ps;
-                  String query="INSERT INTO `user_data`( `fname`, `lname`, `email`, `password`) VALUES (?,?,?,?)";
-                  try
-                  {        
-                      ps =  MyConnection.connecct().prepareStatement(query);
-                      ps.setString(1, fname);
-                      if(lname!=null)
-                      {
-                           ps.setString(2, lname);
-                      }
-                      else
-                      {
-                           ps.setNull(2, 0);
-                      }
-                      ps.setString(3, email);
-                      ps.setString(4, pass);
-                      if(ps.executeUpdate()>0)
-                      {
-                           JOptionPane.showMessageDialog(null, "New user Added");
-                      }
-                    } 
-                    catch (SQLException ex)
-                    {
-                            Logger.getLogger(regstration.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+      String Query="SELECT * FROM `user_data` WHERE `email` =?";
+       String query="INSERT INTO `user_data`( `fname`, `lname`, `emai`, `password`) VALUES (?,?,?,?)";
+      regstration_operation r = new regstration_operation();
+       r.employee_data(Query,query,fname, lname, email, pass, re_email, re_pass,true);
     }//GEN-LAST:event_jButtonRegisterActionPerformed
-public boolean  check_email(String email)
-{
-        PreparedStatement ps;
-        ResultSet rs;
-        boolean checkuser=false;
-         String query="SELECT * FROM `user_data` WHERE `email` =?";
-        
-        try 
-        {
-            ps=MyConnection.connecct().prepareStatement(query);
-            ps.setString(1, email);
-               rs=ps.executeQuery();
-            if(rs.next())
-            {
-                checkuser=true;
-            }
-        } 
-        catch (SQLException ex) {
-            Logger.getLogger(regstration.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return checkuser;
-}
-public static boolean  check_pass(String password) {
-
-    Pattern specailCharPatten = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
-    Pattern UpperCasePatten = Pattern.compile("[A-Z ]");
-    Pattern lowerCasePatten = Pattern.compile("[a-z ]");
-    Pattern digitCasePatten = Pattern.compile("[0-9 ]");
- 
-
-    boolean flag=true;
-
-    if (password.length() < 8) {
-        JOptionPane.showMessageDialog(null,"Password lenght must have alleast 8 character !!");
-        flag=false;
-    }
-    else if (!specailCharPatten.matcher(password).find()) {
-         JOptionPane.showMessageDialog(null,"Password must have atleast one specail character !!");
-        flag=false;
-    }
-    else if (!UpperCasePatten.matcher(password).find()) {
-         JOptionPane.showMessageDialog(null,"Password must have atleast one uppercase character !!");
-        flag=false;
-    }
-    else if (!lowerCasePatten.matcher(password).find()) {
-         JOptionPane.showMessageDialog(null,"Password must have atleast one lowercase character !!");
-        flag=false;
-    }
-    else if (!digitCasePatten.matcher(password).find()) {
-         JOptionPane.showMessageDialog(null,"Password must have atleast one digit character !!");
-        flag=false;
-    }
-
-    return flag;
-
-}
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
        

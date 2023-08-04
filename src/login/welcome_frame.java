@@ -4,7 +4,9 @@
  */
 package login;
 
-import com.sun.jdi.connect.spi.Connection;
+import controll.Order_Opreations;
+import controll.welcome_frame_opreations;
+import Modeling.Order_Model;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.sql.*;
@@ -14,8 +16,9 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author marke
@@ -26,29 +29,27 @@ public class welcome_frame extends javax.swing.JFrame {
      * Creates new form welcome_frame
      */
     public welcome_frame() {
+       
         initComponents();
-         dispaly_icon();
+        dispaly_icon();
+       
     }
     public static double total=0;
-    Connection con;
-    PreparedStatement ps;   
-    ResultSet rs;
     int count=100;
     
     private void Balance (){
         double Total = Double.parseDouble(jTextFieldTotal.getText());
         double pay =Float.parseFloat(jTextFieldPay.getText());
-       
-        if (pay<Total)
+      
+        float bal=welcome_frame_opreations.get_balance(pay, Total);
+        
+        if (bal==-1)
         {
               JOptionPane.showMessageDialog(null, "pay must be more than Total  ");
                //handel error by refresh the page
-    
-             
+  
         }
-        else{
-        float bal= (float)(pay-Total);
-        
+        else{     
         jTextFieldBalance.setText(String.valueOf(bal));
         }
     }
@@ -59,6 +60,7 @@ public class welcome_frame extends javax.swing.JFrame {
                    String Ballance =jTextFieldBalance.getText();
                    DefaultTableModel model = new DefaultTableModel();
                    model = (DefaultTableModel)jTable1.getModel();
+                   
                    jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n");
                    jTextAreaBill.setText(jTextAreaBill.getText()+"                    BILL                       \n");
                    jTextAreaBill.setText(jTextAreaBill.getText()+"***********************************************\n\n");
@@ -119,7 +121,7 @@ public class welcome_frame extends javax.swing.JFrame {
                          double t=Double.parseDouble(tot);
                          total+=t;
                          out.println("total_till_now:"+total);
-
+                         
                          out.close();
                         }catch (IOException ex) {
                              System.out.println(ex.getMessage());
@@ -127,7 +129,7 @@ public class welcome_frame extends javax.swing.JFrame {
                     
                        }catch(Exception e)
                         {System.out.println(e.getMessage());}
-                }
+                } 
     private void addOrderToDashboard(){
             try
             {
@@ -164,12 +166,13 @@ public class welcome_frame extends javax.swing.JFrame {
             double sum=0;
             for(int i=0;i<jTable1.getRowCount();i++)
             {
-                sum =sum + Double.parseDouble(jTable1.getValueAt(i, 4).toString());
+               sum=welcome_frame_opreations.get_total( Double.parseDouble(jTable1.getValueAt(i, 4).toString()) ,sum);
             }
 
+            
 
             jTextFieldTotal.setText(Double.toString(sum));
-
+              
                 jTextFieldP_Code.setText("");
                 jTextFieldP_Name.setText("");
                 jTextFieldPrice.setText("");
@@ -187,59 +190,8 @@ public class welcome_frame extends javax.swing.JFrame {
         Image login =user.getImage().getScaledInstance(jLabelicone.getWidth(), jLabelicone.getHeight(), Image.SCALE_SMOOTH);
         jLabelicone.setIcon(new ImageIcon(login));
      }
-    private void enterKey(){
-        
-            String pcode = jTextFieldP_Code.getText();
-            String query="select * from product_sales where id =?";
-            try {
-                ps=MyConnection.connecct().prepareStatement(query);
-                  ps.setString(1, pcode);
-                  rs=ps.executeQuery();
-                  if(rs.next()==false)
-                  {
-                       JOptionPane.showMessageDialog(null, "Product Code Not Found  ");
-                       
-                  }
-                  else
-                  {
-                      String pname =rs.getString("productname");
-                      String price =rs.getString("price");
-                      
-                      jTextFieldP_Name.setText(pname);
-                      jTextFieldPrice.setText(price);
-                      
-                  }
-                  
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-                Logger.getLogger(welcome_frame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-    }
-    private void qtyChange(){
-       try{
-        int qty = Integer.parseInt(jSpinnerQty.getValue().toString());
-        float price =Float.parseFloat(jTextFieldPrice.getText());
-        
-        float amount= qty* price;
-        
-        jTextFieldAmount.setText(String.valueOf(amount));
-        }
-         catch(Exception e)
-    {System.out.println(e.getMessage());}
-    }
     private void ourProductsFrame(){
-        try {
-             Our_Products rgf;
-             rgf = new Our_Products();
-             rgf.setVisible(true);
-             rgf.pack();
-             rgf.setLocationRelativeTo(null);
-             rgf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-             this.dispose();
-        } catch (SQLException ex) {
-            Logger.getLogger(welcome_frame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
     private void loginFrame(){
       login_frame login = new login_frame();
@@ -539,6 +491,11 @@ public class welcome_frame extends javax.swing.JFrame {
 
         jTextFieldTotal.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         jTextFieldTotal.setEditable(false);
+        jTextFieldTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTotalActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -688,14 +645,23 @@ public class welcome_frame extends javax.swing.JFrame {
     private void jTextFieldP_CodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldP_CodeKeyPressed
     
         if(evt.getKeyCode()==KeyEvent.VK_ENTER)
-          enterKey(); 
-
+        {
+            String pcode = jTextFieldP_Code.getText();
+            Order_Model item=Order_Opreations.get_order_data(pcode,true);
+            jTextFieldP_Name.setText(item.getName());
+            jTextFieldPrice.setText(String.valueOf(item.getPrice()));
+        }
     }//GEN-LAST:event_jTextFieldP_CodeKeyPressed
  
     private void jSpinnerQtyStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerQtyStateChanged
-
-        qtyChange();
+        int qty = Integer.parseInt(jSpinnerQty.getValue().toString());
+        float price =Float.parseFloat(jTextFieldPrice.getText());
         
+        float amount = welcome_frame_opreations.qtyChange( qty ,price);
+        if (amount!=-1)
+          jTextFieldAmount.setText(String.valueOf(amount));
+      
+       
     }//GEN-LAST:event_jSpinnerQtyStateChanged
 
     private void jTextFieldBalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBalanceActionPerformed
@@ -730,8 +696,17 @@ public class welcome_frame extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        ourProductsFrame();
-
+        
+        try {
+            Our_Products hf=new Our_Products();
+            hf.setVisible(true); 
+            hf.pack();
+            hf.setLocationRelativeTo(null);
+            hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.dispose();
+        } catch(Exception e){
+                System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
@@ -754,10 +729,16 @@ public class welcome_frame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldP_CodeActionPerformed
 
+    private void jTextFieldTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTotalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTotalActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        login_frame f =new login_frame();
+                  f.dispose();
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -784,6 +765,8 @@ public class welcome_frame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                  
+       
                 new welcome_frame().setVisible(true);
             }
         });

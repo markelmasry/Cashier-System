@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Search_emp_operation.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;login&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">controll</a> &gt; <span class="el_source">Search_emp_operation.java</span></div><h1>Search_emp_operation.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controll;
+
+
+import controll.Tables_Opreations;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import Modeling.Database_Opreations;
+import Modeling.Employee_Model;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+
+
+/**
+ *
+ * @author radwa
+ */
+<span class="fc" id="L24">public class Search_emp_operation {</span>
+   
+   public static Employee_Model search_result(String id, boolean checking){
+        
+        ResultSet rs;
+        
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        if(id.equals(&quot;&quot;))</span>
+        {
+<span class="fc" id="L32">            JOptionPane.showMessageDialog(null, &quot; Add Employee code &quot;);</span>
+        }
+
+        else
+        {
+<span class="fc" id="L37">            String query=&quot;select * from user_data  WHERE `id` =? &quot;;</span>
+<span class="fc" id="L38">            rs=Database_Opreations.Search_emp(query, id,true);</span>
+            
+            try {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                   if (checking== false)</span>
+<span class="fc" id="L42">                         throw new SQLException();</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">                  if(rs.next())</span>
+                {
+<span class="fc" id="L45">                    String id_ =String.valueOf(rs.getInt(&quot;id&quot;));</span>
+<span class="fc" id="L46">                    String fname =rs.getString(&quot;fname&quot;);</span>
+<span class="fc" id="L47">                    String lname=rs.getString(&quot;lname&quot;);</span>
+<span class="fc" id="L48">                    String email =rs.getString(&quot;email&quot;);</span>
+                    
+<span class="fc" id="L50">                    return new Employee_Model (id_,fname,lname,email,null);</span>
+
+                }
+                else {
+<span class="fc" id="L54">                    JOptionPane.showMessageDialog(null, &quot;this employee dosent  exist   &quot;);</span>
+                }
+<span class="fc" id="L56">            } catch(SQLException ex)</span>
+            {
+<span class="fc" id="L58">              System.out.println(ex.getMessage());</span>
+            
+<span class="fc" id="L60">            }</span>
+        }
+<span class="fc" id="L62">        return new Employee_Model (null,null,null,null,null); </span>
+        
+    }
+     
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

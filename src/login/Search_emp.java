@@ -4,13 +4,11 @@
  */
 package login;
 
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
+import Modeling.Employee_Model;
+import controll.Search_emp_operation;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
-import java.sql.*;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -187,32 +185,9 @@ ResultSet rs;
 
     private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
 
-        String id = jTextField1.getText();
-
-        if(id.equals(""))
-        {
-            JOptionPane.showMessageDialog(null, " Add Employee code ");
-        }
-
-        else
-        {
-
-            String query="select * from user_data  WHERE `id` =? ";
-            try {
-                ps=MyConnection.connecct().prepareStatement(query);
-
-                ps.setString(1, id);
-                rs=ps.executeQuery();
-
-                if(rs.next())
-                {
-                    String id_ =String.valueOf(rs.getInt("id"));
-                    String fname =rs.getString("fname");
-                    String lname=rs.getString("lname");
-                    String email =rs.getString("email");
-                    
-
-                    String data []={id_,fname,lname,email};
+             String id = jTextField1.getText();
+        Employee_Model e= Search_emp_operation.search_result(id,true);
+          String data []={e.getid(),e.getFirstNmae(),e.getLastNmae(),e.getLastNmae()};
                     DefaultTableModel model = new DefaultTableModel();
                     model = (DefaultTableModel)jTable2.getModel();
 
@@ -222,17 +197,6 @@ ResultSet rs;
                         model.removeRow(i);
                     }
                     model.addRow(data);
-
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "this product dosent  exist   ");
-                }
-            } 
-            catch (Exception ex) {
-                System.out.println(ex.getMessage());
-        }
-
-        }
 
     }//GEN-LAST:event_jButtonSearchActionPerformed
 

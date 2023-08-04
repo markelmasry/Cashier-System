@@ -3,15 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package login;
-import com.sun.jdi.connect.spi.Connection;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
+
 import java.sql.*;
+import controll.Tables_Opreations;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import controll.Our_Product_Opreations;
 
 /**
  *
@@ -24,12 +23,10 @@ public class Our_Products extends javax.swing.JFrame {
      */
     public Our_Products() throws SQLException {
         initComponents();
-        show_table();
+        Tables_Opreations.Show_Product_table(jTable1);
         
     }
-     Connection con;
-    PreparedStatement ps;   
-    ResultSet rs;
+     
 
     
     /**
@@ -285,201 +282,52 @@ public class Our_Products extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        
 
+         Our_Product_Opreations b= new  Our_Product_Opreations();
 
       String pname = jTextFieldP_Name.getText();
       String price = jTextFieldPrice.getText();
       String product_price = jTextFieldProduct_Price.getText();
-
-               
-                if(pname.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add product name ");
-                }
-                else if(price.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add an Custmer_Price ");
-                }
-                else if(product_price.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add an product_price ");
-                }
-                else if (check_pname(pname))
-                {
-                    JOptionPane.showMessageDialog(null, " this product is already exist  ");
-                }
-    
-    
-                else
-                {
-
-                  PreparedStatement ps;
-                  String query="INSERT INTO `product_sales`( `productname`,`Whole_price`, `price`) VALUES (?,?,?)";
-                  try
-                  {        
-                      ps =  MyConnection.connecct().prepareStatement(query);
-                      ps.setString(1, pname);
-                      ps.setString(2, product_price);
-                      ps.setString(3, price);
-                      
-                      if(ps.executeUpdate()>0)
-                      {Update_table();
-                           JOptionPane.showMessageDialog(null, "New Product Added");
-                              
-                      }
-                    } 
-                    catch (SQLException ex)
-                    {
-                        System.out.println(ex.getMessage());
-                            Logger.getLogger(regstration.class.getName()).log(Level.SEVERE, null, ex);
-                            System.out.println(ex.getMessage());
-                    }
-                }
-       
+      String query="INSERT INTO `product_sales`( `productname`,`Whole_price`, `price`) VALUES (?,?,?)";
+      String Query="SELECT * FROM `product_sales` WHERE `productname` =?";
+     b.addData(query,pname, price, product_price,true,true);
+        try {
+            Tables_Opreations.Update_Product_table(jTable1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Our_Products.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
-     public boolean check_pname(String pname)
-     {
-         
-        boolean checkuser=false;
-         String query="SELECT * FROM `product_sales` WHERE `productname` =?";
-        
-        try 
-        {
-            ps=MyConnection.connecct().prepareStatement(query);
-            ps.setString(1, pname);
-               rs=ps.executeQuery();
-            if(rs.next())
-            {
-                checkuser=true;
-            }
-        } 
-        catch (SQLException ex) {
-            Logger.getLogger(regstration.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
-        }
-        return checkuser;
-     
-     }
 
-    public void show_table() throws SQLException
-    {
-         
-         String query="select * from product_sales";
-          
-                ps=MyConnection.connecct().prepareStatement(query);
-            
-                  rs=ps.executeQuery();
-                  while(rs.next())            
-                  {
-                      String id =String.valueOf(rs.getInt("id"));
-                      String pname =rs.getString("productname");
-                      String Whole_price=rs.getString("Whole_price");
-                      String price =rs.getString("price");
-                      
-                      
-                      String data []={id,pname,Whole_price,price};
-                         DefaultTableModel model = new DefaultTableModel();
-                         model = (DefaultTableModel)jTable1.getModel();
-                         model.addRow(data);
-                         
-                  }
-    }
-     public void Update_table() throws SQLException
-    {
-        DefaultTableModel model = new DefaultTableModel(); 
-        model = (DefaultTableModel)jTable1.getModel();
-        model.setRowCount(0);
-        show_table();
-     
-    }
-    
-    
- 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        
+         Our_Product_Opreations b= new  Our_Product_Opreations();
       String pname = jTextFieldP_Name.getText();
-
-               
-                if(pname.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add product name ");
-                }
-              
-                else if (!check_pname(pname))
-                {
-                    JOptionPane.showMessageDialog(null, " this product dosent exist  ");
-                }
-    
-    
-                else
-                {
-
-                 
-                  String query="DELETE FROM `product_sales` WHERE `productname` = ?";
-                  try
-                  {        
-                      ps =  MyConnection.connecct().prepareStatement(query);
-                      ps.setString(1, pname);
-                      ps.executeUpdate();
-                      Update_table();
-                      JOptionPane.showMessageDialog(null, " Product Deleted");
-                         
-                  } 
-                  catch (SQLException ex)
-                    {
-                        System.out.println(ex.getMessage());
-                        Logger.getLogger(regstration.class.getName()).log(Level.SEVERE, null, ex);
-                        System.out.println(ex.getMessage());
-          
-                }
-
-                }
-                
+      String query="DELETE FROM `product_sales` WHERE `productname` = ?";
+       String Query="SELECT * FROM `product_sales` WHERE `productname` =?";
+      b.deleteData(query,pname,true,true);
+        try {
+            Tables_Opreations.Update_Product_table(jTable1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Our_Products.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
                 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
      
+         Our_Product_Opreations b= new  Our_Product_Opreations();
         String pname = jTextFieldP_Name.getText();
       String price = jTextFieldPrice.getText();
       String product_price = jTextFieldProduct_Price.getText();
-      
-                if(pname.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add product name ");
-                }
-                else if(price.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add an Custmer_Price ");
-                }
-                else if(product_price.equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, " Add an product_price ");
-                }
-                else if (!check_pname(pname))
-                {
-                    JOptionPane.showMessageDialog(null, " this product dosent exist  ");
-                }
-                else{
-     try{
-
-        String query="UPDATE `product_sales` SET `price`='"+price+"',`Whole_price`='"+product_price+"' where `productname` ='"+pname+"'";
-        ps =  MyConnection.connecct().prepareStatement(query);
-         ps.execute();
-          Update_table();
-         JOptionPane.showMessageDialog(null, " Product Updated");
-           
-}
-      catch (SQLException ex)
-                    {
-                        System.out.println(ex.getMessage());
-                            Logger.getLogger(regstration.class.getName()).log(Level.SEVERE, null, ex);
-                            System.out.println(ex.getMessage());
-          
-                }
-                }
+      String query="UPDATE `product_sales` SET `price`='"+price+"',`Whole_price`='"+product_price+"' where `productname` ='"+pname+"'";
+       String Query="SELECT * FROM `product_sales` WHERE `productname` =?";
+      b.editData(query,pname, price, product_price,true,true );
+        try {
+            Tables_Opreations.Update_Product_table(jTable1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Our_Products.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -492,9 +340,7 @@ public class Our_Products extends javax.swing.JFrame {
                 hf.setLocationRelativeTo(null);
                 hf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 this.dispose();
-                
-                
-                
+              
         } catch (SQLException ex) {
             Logger.getLogger(Our_Products.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -566,11 +412,13 @@ public class Our_Products extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+              
                 try {
                     new Our_Products().setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(Our_Products.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
             }
         });
     }
@@ -592,7 +440,7 @@ public class Our_Products extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private static javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldP_Name;
     private javax.swing.JTextField jTextFieldPrice;
     private javax.swing.JTextField jTextFieldProduct_Price;
